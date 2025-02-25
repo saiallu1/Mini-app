@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Location</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <h2>Fetching Location...</h2>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        function sendLocation(lat, lon) {
+            fetch(`https://api.telegram.org/botYOUR_TELEGRAM_BOT_TOKEN/sendMessage?chat_id=${tg.initDataUnsafe.user.id}&text=Location: ${lat},${lon}`)
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error('Error:', error));
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                sendLocation(position.coords.latitude, position.coords.longitude);
+            },
+            (error) => {
+                alert("Please allow location access in your browser settings.");
+            }
+        );
+    </script>
+</body>
+</html>
